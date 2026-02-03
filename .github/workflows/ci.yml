@@ -1,0 +1,19 @@
+name: Phase-2 CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Phase-2 test script
+        run: |
+          chmod +x phase2/test.sh
+          ./phase2/test.sh
