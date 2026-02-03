@@ -1,0 +1,28 @@
+name: CI-CD Pipeline (Docker Deploy to EC2)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build -t phase3-docker ./phase3
+
+      - name: Deploy on EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker build -t phase3-docker ~/Linux-Bash-DevOps-Practice/phase3
+            bash ~/Linux-Bash-DevOps-Practice/phase4/deploy.sh
